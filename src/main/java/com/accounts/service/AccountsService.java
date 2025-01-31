@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.accounts.dto.AccountBalanceUpdateReq;
+import com.accounts.dto.User;
 import com.accounts.entity.Account;
 import com.accounts.repo.AccountsRepo;
 
@@ -12,10 +15,17 @@ import com.accounts.repo.AccountsRepo;
 public class AccountsService {
 	
 	@Autowired AccountsRepo accountsRepo;
+	@Autowired private RestTemplate restTemplate;
 	
 	public List<Account> getAllAccoutns() {
 		
-		return accountsRepo.findAll();
+		List<Account> accounts = accountsRepo.findAll();
+		for(Account account: accounts) {
+			
+			 User user = restTemplate.getForObject("http://user-service/users/" + account.getUserId(), User.class);
+			 account.setUser(user);
+		}
+		return accounts;
 	}
 	
 	public Account getAccountById(Long id) {
@@ -35,5 +45,14 @@ public class AccountsService {
 	
 	public void deleteAccount(Long accountId) {
 		accountsRepo.deleteById(accountId);
+	}
+
+	public String updateAccountBalance(AccountBalanceUpdateReq accountBalanceUpdateReq) {
+		Account account = accountsRepo.findByUserId(accountBalanceUpdateReq.getUserId()).get();
+		if (account != null) {
+			account.setBalance(account.getBalance()+ accountBalanceUpdateReq.getBalance());
+			accountsRepo.save(account);
+		}
+		return null;
 	}
 }

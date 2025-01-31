@@ -1,7 +1,8 @@
 package com.accounts.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
+
+import com.accounts.dto.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name="accounts")
@@ -33,6 +35,9 @@ public class Account {
 	
 	@Column(name = "updated_at")
 	private Date updatedOn;
+	
+	@Transient
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -75,6 +80,7 @@ public class Account {
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
+	
 
 	public Date getUpdatedOn() {
 		return updatedOn;
@@ -82,6 +88,14 @@ public class Account {
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	

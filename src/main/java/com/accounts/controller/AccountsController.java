@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.accounts.dto.AccountBalanceUpdateReq;
 import com.accounts.entity.Account;
 import com.accounts.service.AccountsService;
 
@@ -42,6 +43,12 @@ public class AccountsController {
 	public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
 		
 		return ResponseEntity.ok(booksService.createAccount(account));
+	}
+	
+	@PostMapping("/update-balance")
+	public ResponseEntity<String> updateAccountBalance(@RequestBody AccountBalanceUpdateReq accountBalanceUpdateReq) {
+		
+		return ResponseEntity.ok(booksService.updateAccountBalance(accountBalanceUpdateReq));
 	}
 	
 	@DeleteMapping("/{id}")
